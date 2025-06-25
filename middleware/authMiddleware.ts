@@ -16,12 +16,10 @@ export const protect = async (
   }
 
   const token = authHeader.split(' ')[1];
- console.log(">>p", process.env.JWT_SECRET)
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
       id: string;
     };
-    console.log("dec",decoded)
     const user = await User.findById(decoded.id).select('-password');
     if (!user) return res.status(401).json({ message: 'User not found' });
     req.user = user;

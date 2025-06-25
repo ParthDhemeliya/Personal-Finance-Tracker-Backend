@@ -1,13 +1,13 @@
 import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import User, { IUser } from '../models/User';
-import { generateToken } from '../utils/genrateToken'; // ✅ Ensure correct filename spelling
+import { generateToken } from '../utils/genrateToken'; 
 import { protect } from '../middleware/authMiddleware';
 const router = express.Router();
 
 router.post('/signup', async (req: any, res: any) => {
   try {
-    
+
     const { email, password } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) {

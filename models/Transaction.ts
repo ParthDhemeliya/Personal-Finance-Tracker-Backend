@@ -6,10 +6,10 @@ const transactionSchema = new mongoose.Schema(
       enum: ['income', 'expense'],
       required: true,
     },
-    ammount: {
+    amount: {
       type: Number,
       required: true,
-      min: [0, 'Ammount must be positive'],
+      min: [0, 'Amount must be positive'],
     },
     category: {
       type: String,
@@ -19,7 +19,7 @@ const transactionSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    descripton: {
+    description: {
       type: String,
       default: '',
     },
@@ -32,5 +32,5 @@ const transactionSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const Transaction = mongoose.model("Transaction",transactionSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
 export default Transaction;
