@@ -5,9 +5,9 @@ import {
   getAllIncomes,
   updateIncome,
 } from './income.controller';
-import protect from '../../../middleware/authMiddleware';
 import { validateIncome } from './income.validator.middleware';
 import validateObjectId from '../../utils/validateObjectId';
+import protect from '../auth/auth.middleware';
 
 const router = express.Router();
 
