@@ -2,17 +2,19 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
-export const protect = async (
+const protect = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): Promise<void> => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Not authorized, token missing' });
+    res.status(401).json({ message: 'Not authorized, token missing' });
+    return;
   }
 
   const token = authHeader.split(' ')[1];
@@ -21,10 +23,16 @@ export const protect = async (
       id: string;
     };
     const user = await User.findById(decoded.id).select('-password');
-    if (!user) return res.status(401).json({ message: 'User not found' });
+    if (!user) {
+      res.status(401).json({ message: 'User not found' });
+      return;
+    }
     req.user = user;
     next();
   } catch (err) {
     res.status(401).json({ message: 'Invalid token' });
+    return;
   }
 };
+
+export default protect;
