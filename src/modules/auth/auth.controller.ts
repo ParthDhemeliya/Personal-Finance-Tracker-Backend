@@ -6,8 +6,9 @@ export const signup = async (req: Request, res: Response) => {
   try {
     const result = await AuthService.signup(req.body);
     res.status(201).json(result);
-  } catch (err: any) {
-    res.status(400).json({ message: err.message });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Signup failed';
+    res.status(400).json({ message });
   }
 };
 
@@ -15,8 +16,9 @@ export const login = async (req: Request, res: Response) => {
   try {
     const result = await AuthService.login(req.body);
     res.status(200).json(result);
-  } catch (err: any) {
-    res.status(401).json({ message: err.message });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Login failed';
+    res.status(401).json({ message });
   }
 };
 
@@ -30,8 +32,9 @@ export const getUser = async (req: Request, res: Response) => {
     const userId = (req.user as IUserDocument)._id.toString();
     const user = await AuthService.getUser(userId);
     res.status(200).json(user);
-  } catch (err: any) {
-    res.status(404).json({ message: err.message });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'User not found';
+    res.status(404).json({ message });
   }
 };
 
@@ -45,7 +48,8 @@ export const deleteUser = async (req: Request, res: Response) => {
     const userId = (req.user as IUserDocument)._id.toString();
     await AuthService.deleteUser(userId);
     res.status(204).send();
-  } catch (err: any) {
-    res.status(404).json({ message: err.message });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Delete failed';
+    res.status(404).json({ message });
   }
 };

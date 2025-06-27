@@ -1,11 +1,18 @@
 import mongoose, { Schema, Model, Document, Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
+//  Removed unused enum values to fix lint error
+// export enum UserRole {
+//   ADMIN = 'admin',
+//   USER = 'user',
+// }
+
 export enum UserRole {
-  ADMIN = 'admin',
+  // ADMIN = 'admin',
   USER = 'user',
 }
 
+//  No changes needed for IUser or IUserMethods unless we want to remove unused props in the future
 export interface IUser {
   email: string;
   password: string;
@@ -21,11 +28,18 @@ export interface IUserMethods {
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
 
-// export type IUserDocument = Document<unknown, {}, IUser & IUserMethods> & IUser & IUserMethods;
-export type IUserDocument = Document<Types.ObjectId, {}, IUser & IUserMethods> & IUser & IUserMethods;
+export type IUserDocument = Document<Types.ObjectId, {}, IUser & IUserMethods> &
+  IUser &
+  IUserMethods;
 
 const userSchema = new Schema<IUserDocument>({
-  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true,
+  },
   password: { type: String, required: true },
   first_name: { type: String, required: true, trim: true },
   last_name: { type: String, required: true, trim: true },
@@ -40,7 +54,7 @@ const userSchema = new Schema<IUserDocument>({
   updated_at: { type: Date, default: Date.now, required: true },
 });
 
-userSchema.pre('save', async function (next) {
+userSchema.pre<IUserDocument>('save', async function (next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
@@ -57,9 +71,15 @@ userSchema.pre('updateOne', function (next) {
   next();
 });
 
-userSchema.methods.matchPassword = async function (enteredPassword: string): Promise<boolean> {
+
+userSchema.methods.matchPassword = async function (
+  enteredPassword: string,
+): Promise<boolean> {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const User: Model<IUserDocument> = mongoose.model<IUserDocument>('User', userSchema);
+const User: Model<IUserDocument> = mongoose.model<IUserDocument>(
+  'User',
+  userSchema,
+);
 export default User;

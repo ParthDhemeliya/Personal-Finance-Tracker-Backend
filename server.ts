@@ -1,4 +1,5 @@
-import express, { Request, Response } from 'express';
+/* eslint-env node */
+import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import run from './config/db';

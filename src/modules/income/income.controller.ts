@@ -11,14 +11,19 @@ export const getAllIncomes = async (req: Request, res: Response) => {
   try {
     const incomes = await IncomeService.getIncomes(userId);
     res.status(200).json(incomes);
-  } catch (err: any) {
-    res.status(500).json({ message: err.message });
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : 'Failed to fetch incomes';
+    res.status(500).json({ message });
   }
 };
 
 export const createIncome = async (req: Request, res: Response) => {
   const userId = req.user?._id?.toString();
-  if (!userId) res.status(401).json({ message: 'Unauthorized' });
+  if (!userId) {
+    res.status(401).json({ message: 'Unauthorized' });
+    return;
+  }
 
   try {
     const income = await IncomeService.createIncome({
@@ -26,8 +31,10 @@ export const createIncome = async (req: Request, res: Response) => {
       user: userId,
     });
     res.status(201).json(income);
-  } catch (err: any) {
-    res.status(500).json({ message: err.message });
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : 'Failed to create income';
+    res.status(500).json({ message });
   }
 };
 
@@ -49,8 +56,10 @@ export const updateIncome = async (req: Request, res: Response) => {
       return;
     }
     res.status(200).json(updated);
-  } catch (err: any) {
-    res.status(500).json({ message: err.message });
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : 'Failed to update income';
+    res.status(500).json({ message });
   }
 };
 
@@ -68,7 +77,9 @@ export const deleteIncome = async (req: Request, res: Response) => {
       return;
     }
     res.status(200).json({ message: 'Income deleted successfully' });
-  } catch (err: any) {
-    res.status(500).json({ message: err.message });
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : 'Failed to delete income';
+    res.status(500).json({ message });
   }
 };

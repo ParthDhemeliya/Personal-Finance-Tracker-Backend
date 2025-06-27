@@ -3,7 +3,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 const TRANSACTION_TYPES = ['income', 'expense'] as const;
 const PAYMENT_METHODS = ['cash', 'card', 'bank_transfer', 'other'] as const;
 
- interface ITransaction extends Document {
+interface ITransaction extends Document {
   type: (typeof TRANSACTION_TYPES)[number];
   amount: mongoose.Types.Decimal128;
   incomeSource?: mongoose.Types.ObjectId;
@@ -34,7 +34,7 @@ const transactionSchema = new Schema<ITransaction>(
     incomeSource: {
       type: Schema.Types.ObjectId,
       ref: 'Category',
-      required(this: ITransaction) {
+      required: function requiredIncomeSource(this: ITransaction) { // Fix for linting error
         return this.type === 'income';
       },
     },
@@ -42,7 +42,7 @@ const transactionSchema = new Schema<ITransaction>(
     expenseCategory: {
       type: Schema.Types.ObjectId,
       ref: 'Category',
-      required(this: ITransaction) {
+      required: function requiredExpenseCategory(this: ITransaction) { // Fix for linting error
         return this.type === 'expense';
       },
     },
@@ -97,8 +97,8 @@ const transactionSchema = new Schema<ITransaction>(
 transactionSchema.index({ user: 1, date: -1 });
 transactionSchema.index({ user: 1, type: 1, date: -1 });
 
-//add custom validator to enforce exclusivity
-transactionSchema.pre('validate', function (next) {
+// Add custom validator to enforce exclusivity
+transactionSchema.pre('validate', function(this: ITransaction, next) {
   if (
     (this.type === 'income' && !this.incomeSource) ||
     (this.type === 'expense' && !this.expenseCategory)

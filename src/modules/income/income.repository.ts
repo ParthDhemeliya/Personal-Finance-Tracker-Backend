@@ -24,11 +24,6 @@ export const IncomeRepository = {
       updates,
       { new: true },
     );
-
-    if (!result) {
-      console.warn('⚠️ No matching income found to update.');
-    }
-
     return result;
   },
 
@@ -39,11 +34,6 @@ export const IncomeRepository = {
       user: userId,
       type: 'income',
     });
-
-    if (!result) {
-      console.warn('No matching income found to delete.');
-    }
-
     return result;
   },
 };

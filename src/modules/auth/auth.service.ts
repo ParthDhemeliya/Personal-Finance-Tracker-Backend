@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import { AuthRepository } from './auth.repository';
 import { AuthRequestBody, SignupRequestBody } from './auth.interface';
