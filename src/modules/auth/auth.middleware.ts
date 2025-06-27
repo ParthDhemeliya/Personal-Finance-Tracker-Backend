@@ -19,18 +19,18 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
       id: string;
     };
-    const user = await User.findById(decoded.id).select('-password');
+    const user = await User.findById(decoded.id).select('-password'); //from repo
 
     if (!user) {
       res.status(401).json({ message: 'User not found' });
       return;
     }
-
+    //reuser  res.status
     req.user = user;
     next();
-  } catch (err:unknown) {
+  } catch (err: unknown) {
     res.status(401).json({ message: 'Invalid token' });
+    return;
   }
 };
-
 export default protect;

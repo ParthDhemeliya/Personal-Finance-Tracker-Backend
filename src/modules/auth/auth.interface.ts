@@ -11,3 +11,6 @@ export interface SignupRequestBody extends AuthRequestBody {
   first_name: string;
   last_name: string;
 }
+import { z } from 'zod';
+import { signupSchema } from './auth.validator';
+type User = z.infer<typeof signupSchema>;
