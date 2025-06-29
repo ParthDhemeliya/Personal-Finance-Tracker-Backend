@@ -8,6 +8,7 @@ import incomeRoutes from './src/modules/income/income.routes';
 import './models/Category';
 import authRoutes from './src/modules/auth/auth.routes';
 import { globalErrorHandler } from './src/middlewares/error.middleware';
+import expenseRoutes from './src/modules/expense/expense.routes';
 dotenv.config();
 const port = process.env.PORT || 5000;
 const app = express();
@@ -23,11 +24,12 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(globalErrorHandler);
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/v1/incomes', incomeRoutes);
+app.use('/api/v1/expenses', expenseRoutes);
+app.use(globalErrorHandler);
 
 // Startup banner
 app.listen(port, () => {

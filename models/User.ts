@@ -28,7 +28,11 @@ export interface IUserMethods {
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
 
-export type IUserDocument = Document<Types.ObjectId, {}, IUser & IUserMethods> &
+export type IUserDocument = Document<
+  Types.ObjectId,
+  unknown,
+  IUser & IUserMethods
+> &
   IUser &
   IUserMethods;
 
@@ -70,7 +74,6 @@ userSchema.pre('updateOne', function (next) {
   this.set({ updated_at: new Date() });
   next();
 });
-
 
 userSchema.methods.matchPassword = async function (
   enteredPassword: string,
