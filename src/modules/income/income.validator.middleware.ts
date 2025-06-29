@@ -1,7 +1,11 @@
- import { Request, Response, NextFunction } from "express";
-import { IncomeSchema } from "./income.validator";
+import { Request, Response, NextFunction } from 'express';
+import { IncomeSchema } from './income.validator';
 
-export const validateIncome = (req: Request, res: Response, next: NextFunction): void => {
+export const validateIncome = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
   const result = IncomeSchema.safeParse(req.body);
 
   if (!result.success) {
@@ -14,7 +18,3 @@ export const validateIncome = (req: Request, res: Response, next: NextFunction):
   req.body = result.data;
   next();
 };
-
-
-
-                                        

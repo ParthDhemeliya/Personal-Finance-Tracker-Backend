@@ -1,12 +1,9 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
+import { z } from 'zod';
+import { IncomeSchema } from './income.validator';
 
-export interface IncomeInput {
-  amount: number;
-  date: string;
-  description?: string;
-  paymentMethod: "cash" | "card" | "bank_transfer" | "other";
-  currency: string;
+export type IncomeInput = z.infer<typeof IncomeSchema> & {
   incomeSource: Types.ObjectId;
   user: Types.ObjectId;
-  type?: string; 
-}
+  type?: string;
+};

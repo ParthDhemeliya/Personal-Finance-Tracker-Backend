@@ -1,7 +1,11 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { IncomeService } from './income.service';
 
-export const getAllIncomes = async (req: Request, res: Response) => {
+export const getAllIncomes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const userId = req.user?._id?.toString();
   if (!userId) {
     res.status(401).json({ message: 'Unauthorized' });
@@ -12,13 +16,15 @@ export const getAllIncomes = async (req: Request, res: Response) => {
     const incomes = await IncomeService.getIncomes(userId);
     res.status(200).json(incomes);
   } catch (err: unknown) {
-    const message =
-      err instanceof Error ? err.message : 'Failed to fetch incomes';
-    res.status(500).json({ message });
+    next(err);
   }
 };
 
-export const createIncome = async (req: Request, res: Response) => {
+export const createIncome = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const userId = req.user?._id?.toString();
   if (!userId) {
     res.status(401).json({ message: 'Unauthorized' });
@@ -32,13 +38,15 @@ export const createIncome = async (req: Request, res: Response) => {
     });
     res.status(201).json(income);
   } catch (err: unknown) {
-    const message =
-      err instanceof Error ? err.message : 'Failed to create income';
-    res.status(500).json({ message });
+    next(err);
   }
 };
 
-export const updateIncome = async (req: Request, res: Response) => {
+export const updateIncome = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const userId = req.user?._id?.toString();
   if (!userId) {
     res.status(401).json({ message: 'Unauthorized' });
@@ -57,13 +65,15 @@ export const updateIncome = async (req: Request, res: Response) => {
     }
     res.status(200).json(updated);
   } catch (err: unknown) {
-    const message =
-      err instanceof Error ? err.message : 'Failed to update income';
-    res.status(500).json({ message });
+    next(err);
   }
 };
 
-export const deleteIncome = async (req: Request, res: Response) => {
+export const deleteIncome = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const userId = req.user?._id?.toString();
   if (!userId) {
     res.status(401).json({ message: 'Unauthorized' });
@@ -78,8 +88,6 @@ export const deleteIncome = async (req: Request, res: Response) => {
     }
     res.status(200).json({ message: 'Income deleted successfully' });
   } catch (err: unknown) {
-    const message =
-      err instanceof Error ? err.message : 'Failed to delete income';
-    res.status(500).json({ message });
+    next(err);
   }
 };

@@ -2,15 +2,19 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../../../models/User';
 import dotenv from 'dotenv';
+import { AppError } from '../../utils/error/AppError';
 
 dotenv.config();
 
-const protect = async (req: Request, res: Response, next: NextFunction) => {
+const protect = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader?.startsWith('Bearer ')) {
-    res.status(401).json({ message: 'Not authorized, token missing' });
-    return;
+    return next(new AppError('Not authorized, token missing', 401));
   }
 
   const token = authHeader.split(' ')[1];
@@ -19,18 +23,17 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
       id: string;
     };
-    const user = await User.findById(decoded.id).select('-password'); //from repo
+    const user = await User.findById(decoded.id).select('-password');
 
     if (!user) {
-      res.status(401).json({ message: 'User not found' });
-      return;
+      return next(new AppError('User not found', 401));
     }
-    //reuser  res.status
+
     req.user = user;
     next();
-  } catch (err: unknown) {
-    res.status(401).json({ message: 'Invalid token' });
-    return;
+  } catch {
+    return next(new AppError('Invalid or expired token', 401));
   }
 };
+
 export default protect;

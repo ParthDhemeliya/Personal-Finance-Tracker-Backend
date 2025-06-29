@@ -1,5 +1,6 @@
 import { ZodSchema, ZodError } from 'zod';
 import { Request, Response, NextFunction } from 'express';
+import { AppError } from './error/AppError';
 
 export const validate =
   (schema: ZodSchema<unknown>) =>
@@ -7,16 +8,11 @@ export const validate =
     try {
       schema.parse(req.body);
       next();
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof ZodError) {
-        res.status(400).json({
-          message: 'Validation error',
-          errors: error.errors.map((e) => e.message),
-        });
-      } else {
-        res.status(500).json({
-          message: 'Internal server error',
-        });
+        const messages = error.errors.map((e) => e.message);
+        return next(new AppError('Validation error', 400, messages));
       }
+      return next(error);
     }
   };

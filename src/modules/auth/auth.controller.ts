@@ -1,28 +1,38 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { IUserDocument } from '../../../models/User';
 
-export const signup = async (req: Request, res: Response) => {
+export const signup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const result = await AuthService.signup(req.body);
     res.status(201).json(result);
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Signup failed';
-    res.status(400).json({ message });
+    next(err);
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const result = await AuthService.login(req.body);
     res.status(200).json(result);
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Login failed';
-    res.status(401).json({ message });
+    next(err);
   }
 };
 
-export const getUser = async (req: Request, res: Response) => {
+export const getUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     if (!req.user) {
       res.status(401).json({ message: 'Unauthorized' });
@@ -33,12 +43,15 @@ export const getUser = async (req: Request, res: Response) => {
     const user = await AuthService.getUser(userId);
     res.status(200).json(user);
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'User not found';
-    res.status(404).json({ message });
+    next(err);
   }
 };
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     if (!req.user) {
       res.status(401).json({ message: 'Unauthorized' });
@@ -49,7 +62,6 @@ export const deleteUser = async (req: Request, res: Response) => {
     await AuthService.deleteUser(userId);
     res.status(204).send();
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Delete failed';
-    res.status(404).json({ message });
+    next(err);
   }
 };

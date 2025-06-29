@@ -7,6 +7,7 @@ import chalk from 'chalk';
 import incomeRoutes from './src/modules/income/income.routes';
 import './models/Category';
 import authRoutes from './src/modules/auth/auth.routes';
+import { globalErrorHandler } from './src/middlewares/error.middleware';
 dotenv.config();
 const port = process.env.PORT || 5000;
 const app = express();
@@ -22,6 +23,7 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(globalErrorHandler);
 
 // Routes
 app.use('/api/auth', authRoutes);

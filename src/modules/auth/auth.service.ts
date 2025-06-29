@@ -1,26 +1,29 @@
+// src/modules/auth/auth.service.ts
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { AuthRepository } from './auth.repository';
 import { AuthRequestBody, SignupRequestBody } from './auth.interface';
+import { AppError } from '../../utils/error/AppError';
 
 dotenv.config();
 
 export const AuthService = {
   signup: async (data: SignupRequestBody) => {
     const existingUser = await AuthRepository.findByEmail(data.email);
-    if (existingUser) throw new Error('User already exists');
+    if (existingUser) throw new AppError('User already exists', 400);
+
     const user = await AuthRepository.createUser(data);
     return {
-      token: AuthService.generateToken(user?._id.toString()),
+      token: AuthService.generateToken(user._id.toString()),
     };
   },
 
   login: async (data: AuthRequestBody) => {
     const user = await AuthRepository.findByEmail(data.email);
-    if (!user) throw new Error('Invalid credentials');
+    if (!user) throw new AppError('Invalid credentials', 401);
 
     const isMatch = await user.matchPassword(data.password);
-    if (!isMatch) throw new Error('Invalid credentials');
+    if (!isMatch) throw new AppError('Invalid credentials', 401);
 
     return {
       id: user._id,
@@ -31,13 +34,13 @@ export const AuthService = {
 
   getUser: async (id: string) => {
     const user = await AuthRepository.findById(id);
-    if (!user) throw new Error('User not found');
+    if (!user) throw new AppError('User not found', 404);
     return user;
   },
 
   deleteUser: async (id: string) => {
     const deleted = await AuthRepository.deleteUser(id);
-    if (!deleted) throw new Error('User not found or already deleted');
+    if (!deleted) throw new AppError('User not found or already deleted', 404);
   },
 
   generateToken: (id: string) => {
