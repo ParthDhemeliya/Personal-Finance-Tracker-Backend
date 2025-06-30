@@ -1,9 +1,19 @@
 import { Types } from 'mongoose';
-import { z } from 'zod';
-import { IncomeSchema } from './income.validator';
 
-export type IncomeInput = z.infer<typeof IncomeSchema> & {
-  incomeSource: Types.ObjectId;
+export interface IncomeInputRaw {
+  amount: number;
+  date: string;
+  description?: string;
+  paymentMethod: 'cash' | 'card' | 'bank_transfer' | 'other';
+  currency: string;
+  incomeSource?: string | null;
+  customIncomeSource?: string | null;
+}
+
+export interface IncomeInput
+  extends Omit<IncomeInputRaw, 'incomeSource' | 'customIncomeSource'> {
+  incomeSource?: Types.ObjectId;
+  customIncomeSource?: string;
   user: Types.ObjectId;
-  type?: string;
-};
+  type?: 'income';
+}

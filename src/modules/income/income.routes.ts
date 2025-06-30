@@ -3,6 +3,8 @@ import {
   createIncome,
   deleteIncome,
   getAllIncomes,
+  getPaginatedIncomes,
+  getTotalIncome,
   updateIncome,
 } from './income.controller';
 import { validateIncome } from './income.validator.middleware';
@@ -12,7 +14,11 @@ import protect from '../auth/auth.middleware';
 const router = express.Router();
 
 router.use(protect);
+router.get('/paginated', getPaginatedIncomes);
 
+router.get('/total', getTotalIncome);
+
+// other routes
 router.post('/', validateIncome, createIncome);
 router.get('/', getAllIncomes);
 router.put('/:id', validateObjectId, validateIncome, updateIncome);

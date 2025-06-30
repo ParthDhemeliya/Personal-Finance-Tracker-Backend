@@ -1,39 +1,61 @@
+import { Types } from 'mongoose';
 import Transaction from '../../../models/Transaction';
 import { IncomeInput } from './income.interface';
 
 export const IncomeRepository = {
-  // Create a new income transaction
   create: async (data: IncomeInput) => {
     return Transaction.create(data);
   },
 
-  // Fetch all incomes by user ID
   findAllByUser: async (userId: string) => {
     return Transaction.find({ user: userId, type: 'income' })
       .populate('incomeSource', 'name color')
       .sort({ date: -1 });
   },
-  // Update income by ID and user ID
+
+  //  Add pagination method
+  findPaginatedByUser: async (userId: string, page = 1, limit = 5) => {
+    const skip = (page - 1) * limit;
+
+    const query = {
+      user: new Types.ObjectId(userId),
+      type: 'income',
+    };
+
+    const [data, total] = await Promise.all([
+      Transaction.find(query)
+        .populate('incomeSource', 'name color')
+        .sort({ date: -1 })
+        .skip(skip)
+        .limit(limit),
+      Transaction.countDocuments(query),
+    ]);
+
+    return {
+      data,
+      total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+    };
+  },
+
   updateById: async (
     id: string,
     userId: string,
     updates: Partial<IncomeInput>,
   ) => {
-    const result = await Transaction.findOneAndUpdate(
+    return Transaction.findOneAndUpdate(
       { _id: id, user: userId, type: 'income' },
       updates,
       { new: true },
-    );
-    return result;
+    ).populate('incomeSource', 'name color');
   },
 
-  // Delete income by ID and user ID
   deleteById: async (id: string, userId: string) => {
-    const result = await Transaction.findOneAndDelete({
+    return Transaction.findOneAndDelete({
       _id: id,
       user: userId,
       type: 'income',
     });
-    return result;
   },
 };

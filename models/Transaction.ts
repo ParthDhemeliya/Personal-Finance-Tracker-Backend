@@ -6,8 +6,13 @@ const PAYMENT_METHODS = ['cash', 'card', 'bank_transfer', 'other'] as const;
 interface ITransaction extends Document {
   type: (typeof TRANSACTION_TYPES)[number];
   amount: mongoose.Types.Decimal128;
+
   incomeSource?: mongoose.Types.ObjectId;
+  customIncomeSource?: string;
+
   expenseCategory?: mongoose.Types.ObjectId;
+  customExpenseCategory?: string;
+
   date: Date;
   description?: string;
   user: mongoose.Types.ObjectId;
@@ -25,26 +30,30 @@ const transactionSchema = new Schema<ITransaction>(
       enum: TRANSACTION_TYPES,
       required: true,
     },
+
     amount: {
       type: Schema.Types.Decimal128,
       required: true,
       min: [0, 'Amount must be positive'],
     },
 
+    //
     incomeSource: {
       type: Schema.Types.ObjectId,
       ref: 'Category',
-      required: function requiredIncomeSource(this: ITransaction) { // Fix for linting error
-        return this.type === 'income';
-      },
+    },
+    customIncomeSource: {
+      type: String,
+      trim: true,
     },
 
     expenseCategory: {
       type: Schema.Types.ObjectId,
       ref: 'Category',
-      required: function requiredExpenseCategory(this: ITransaction) { // Fix for linting error
-        return this.type === 'expense';
-      },
+    },
+    customExpenseCategory: {
+      type: String,
+      trim: true,
     },
 
     date: {
@@ -97,16 +106,24 @@ const transactionSchema = new Schema<ITransaction>(
 transactionSchema.index({ user: 1, date: -1 });
 transactionSchema.index({ user: 1, type: 1, date: -1 });
 
-// Add custom validator to enforce exclusivity
-transactionSchema.pre('validate', function(this: ITransaction, next) {
-  if (
-    (this.type === 'income' && !this.incomeSource) ||
-    (this.type === 'expense' && !this.expenseCategory)
-  ) {
-    next(new Error('Category reference must be present based on transaction type'));
-  } else {
-    next();
+// ✅ Custom validator to ensure one of the category fields is provided
+transactionSchema.pre('validate', function (this: ITransaction, next) {
+  if (this.type === 'income') {
+    if (!this.incomeSource && !this.customIncomeSource) {
+      return next(
+        new Error('Either incomeSource or customIncomeSource must be provided'),
+      );
+    }
+  } else if (this.type === 'expense') {
+    if (!this.expenseCategory && !this.customExpenseCategory) {
+      return next(
+        new Error(
+          'Either expenseCategory or customExpenseCategory must be provided',
+        ),
+      );
+    }
   }
+  next();
 });
 
 const Transaction: Model<ITransaction> = mongoose.model<ITransaction>(
