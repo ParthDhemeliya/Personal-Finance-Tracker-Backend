@@ -1,6 +1,8 @@
 import { ExpenseInput } from './expense.interface';
 import { ExpenseRepository } from './expense.repository';
 import { AppError } from '../../utils/error/AppError';
+import { Types } from 'mongoose';
+import Transaction from '../../../models/Transaction';
 
 function normalizeAmount(expense: any) {
   const obj = expense.toObject();
@@ -31,5 +33,44 @@ export const ExpenseService = {
     const deleted = await ExpenseRepository.softDelete(id);
     if (!deleted) throw new AppError('Expense not found', 404);
     return deleted;
+  },
+  getPaginatedExpenses: async (page: number, limit: number, userId: string) => {
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      ExpenseRepository.findPaginatedByUser(userId, skip, limit),
+      ExpenseRepository.countByUser(userId),
+    ]);
+
+    return {
+      data: data.map(normalizeAmount),
+      total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+    };
+  },
+
+  calculateTotalAmount: async (userId: string) => {
+    const result = await Transaction.aggregate([
+      {
+        $match: {
+          user: new Types.ObjectId(userId),
+          isDeleted: false,
+          type: 'expense',
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$amount' },
+        },
+      },
+    ]);
+
+    // Convert Decimal128 to number safely
+    const rawTotal = result[0]?.total;
+    const total = rawTotal ? parseFloat(rawTotal.toString()) : 0;
+
+    return { total };
   },
 };

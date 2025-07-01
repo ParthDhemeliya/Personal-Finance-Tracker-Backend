@@ -40,7 +40,6 @@ export const getPaginatedIncomes = async (
 
     res.status(200).json(result);
   } catch (err) {
-    console.log('Controller error:', err);
     next(err);
   }
 };

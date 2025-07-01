@@ -10,11 +10,12 @@ import {
 import { validateIncome } from './income.validator.middleware';
 import validateObjectId from '../../utils/validateObjectId';
 import protect from '../auth/auth.middleware';
+import authMiddleware from '../auth/auth.middleware';
 
 const router = express.Router();
 
 router.use(protect);
-router.get('/paginated', getPaginatedIncomes);
+router.get('/paginated', authMiddleware, getPaginatedIncomes);
 
 router.get('/total', getTotalIncome);
 
