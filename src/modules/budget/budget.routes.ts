@@ -1,0 +1,21 @@
+import { Router } from 'express';
+import protect from '../auth/auth.middleware';
+import {
+  getBudgets,
+  createBudget,
+  updateBudget,
+  deleteBudget,
+} from './budget.controller';
+import { getBudgetOverview } from './budget.overview.controller';
+
+const router = Router();
+
+router.use(protect);
+
+router.get('/', getBudgets);
+router.get('/overview', getBudgetOverview);
+router.post('/', createBudget);
+router.put('/:id', updateBudget);
+router.delete('/:id', deleteBudget);
+
+export default router;

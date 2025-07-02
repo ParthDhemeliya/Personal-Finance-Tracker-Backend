@@ -1,4 +1,34 @@
 import { Request, Response, NextFunction } from 'express';
+
+import { ExpenseCategorySummary } from './expense.interface';
+import { ExpenseRepository } from './expense.repository';
+// GET /api/v1/expenses/category-summary?month=YYYY-MM
+export const getCategorySummary = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const userId = req.user?._id?.toString();
+    if (!userId) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+    const { month } = req.query;
+    if (!month || typeof month !== 'string') {
+      res
+        .status(400)
+        .json({ message: 'Invalid or missing month. Use YYYY-MM format.' });
+      return;
+    }
+    const summary: ExpenseCategorySummary[] =
+      await ExpenseRepository.getCategorySummaryByMonth(userId, month);
+    res.json(summary);
+  } catch (error) {
+    next(error);
+  }
+};
+// (Removed duplicate import)
 import { ExpenseService } from './expense.service';
 import { ExpenseInput } from './expense.interface';
 
@@ -45,8 +75,17 @@ export const updateExpense = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const userId = req.user?._id?.toString();
+  if (!userId) {
+    res.status(401).json({ message: 'Unauthorized' });
+    return;
+  }
   try {
-    const result = await ExpenseService.updateExpense(req.params.id, req.body);
+    const result = await ExpenseService.updateExpense(
+      req.params.id,
+      req.body,
+      userId,
+    );
     res.json(result);
   } catch (error) {
     next(error);
@@ -58,8 +97,13 @@ export const deleteExpense = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const userId = req.user?._id?.toString();
+  if (!userId) {
+    res.status(401).json({ message: 'Unauthorized' });
+    return;
+  }
   try {
-    await ExpenseService.deleteExpense(req.params.id);
+    await ExpenseService.deleteExpense(req.params.id, userId);
     res.status(204).json({ message: 'Deleted' });
   } catch (error) {
     next(error);

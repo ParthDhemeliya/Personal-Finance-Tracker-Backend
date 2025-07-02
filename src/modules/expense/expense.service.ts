@@ -23,14 +23,18 @@ export const ExpenseService = {
     return expenses.map(normalizeAmount);
   },
 
-  updateExpense: async (id: string, data: Partial<ExpenseInput>) => {
-    const updated = await ExpenseRepository.update(id, data);
+  updateExpense: async (
+    id: string,
+    data: Partial<ExpenseInput>,
+    userId: string,
+  ) => {
+    const updated = await ExpenseRepository.updateByUser(id, data, userId);
     if (!updated) throw new AppError('Expense not found', 404);
     return normalizeAmount(updated);
   },
 
-  deleteExpense: async (id: string) => {
-    const deleted = await ExpenseRepository.softDelete(id);
+  deleteExpense: async (id: string, userId: string) => {
+    const deleted = await ExpenseRepository.softDeleteByUser(id, userId);
     if (!deleted) throw new AppError('Expense not found', 404);
     return deleted;
   },

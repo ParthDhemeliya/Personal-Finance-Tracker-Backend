@@ -1,8 +1,72 @@
 import { Types } from 'mongoose';
 import Transaction from '../../../models/Transaction';
-import { ExpenseInput } from './expense.interface';
+import { ExpenseInput, ExpenseCategorySummary } from './expense.interface';
 
 export const ExpenseRepository = {
+  // Aggregate expenses by category for a given month
+  getCategorySummaryByMonth: async (
+    userId: string,
+    month: string,
+  ): Promise<ExpenseCategorySummary[]> => {
+    if (!/^\d{4}-\d{2}$/.test(month)) {
+      throw new Error('Invalid month format. Use YYYY-MM.');
+    }
+    const start = new Date(`${month}-01T00:00:00.000Z`);
+    const end = new Date(start);
+    end.setMonth(end.getMonth() + 1);
+    const summary = await Transaction.aggregate([
+      {
+        $match: {
+          user: new Types.ObjectId(userId),
+          type: 'expense',
+          isDeleted: { $ne: true },
+          date: { $gte: start, $lt: end },
+        },
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'expenseCategory',
+          foreignField: '_id',
+          as: 'categoryInfo',
+        },
+      },
+      {
+        $unwind: {
+          path: '$categoryInfo',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $ifNull: [
+              { $ifNull: ['$categoryInfo.name', '$customExpenseCategory'] },
+              'Uncategorized',
+            ],
+          },
+          amount: { $sum: '$amount' },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          category: '$_id',
+          amount: 1,
+        },
+      },
+    ]);
+    // Convert amount to number and ensure category is string
+    return summary.map((item) => ({
+      category: item.category ?? 'Uncategorized',
+      amount:
+        typeof item.amount === 'object' &&
+        item.amount !== null &&
+        item.amount.toString
+          ? parseFloat(item.amount.toString())
+          : item.amount,
+    }));
+  },
   create: async (data: ExpenseInput & { user: string }) => {
     return Transaction.create({
       ...data,
@@ -74,17 +138,34 @@ export const ExpenseRepository = {
         $match: {
           user: new Types.ObjectId(userId),
           isDeleted: false,
-          type: 'expense', // ✅ only include expense transactions
+          type: 'expense',
         },
       },
       {
         $group: {
           _id: null,
-          total: { $sum: '$amount' }, // ✅ sum of amounts
+          total: { $sum: '$amount' },
         },
       },
     ]);
+    console.log('[DEBUG] Aggregate result:', result);
 
     return { total: result[0]?.total || 0 };
+  },
+
+  updateByUser: async (id: string, data: Partial<any>, userId: string) => {
+    return Transaction.findOneAndUpdate(
+      { _id: id, user: userId, isDeleted: false },
+      data,
+      { new: true },
+    );
+  },
+
+  softDeleteByUser: async (id: string, userId: string) => {
+    return Transaction.findOneAndUpdate(
+      { _id: id, user: userId, isDeleted: false },
+      { isDeleted: true },
+      { new: true },
+    );
   },
 };

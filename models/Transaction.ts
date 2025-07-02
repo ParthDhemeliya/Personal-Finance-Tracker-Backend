@@ -106,7 +106,7 @@ const transactionSchema = new Schema<ITransaction>(
 transactionSchema.index({ user: 1, date: -1 });
 transactionSchema.index({ user: 1, type: 1, date: -1 });
 
-// ✅ Custom validator to ensure one of the category fields is provided
+//  Custom validator to ensure one of the category fields is provided
 transactionSchema.pre('validate', function (this: ITransaction, next) {
   if (this.type === 'income') {
     if (!this.incomeSource && !this.customIncomeSource) {

@@ -1,3 +1,7 @@
+export interface ExpenseCategorySummary {
+  category: string;
+  amount: number;
+}
 import { Types } from 'mongoose';
 import { z } from 'zod';
 import { ExpenseSchema } from './expense.validator';
