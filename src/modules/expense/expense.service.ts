@@ -4,6 +4,7 @@ import { AppError } from '../../utils/error/AppError';
 import { Types } from 'mongoose';
 import Transaction from '../../../models/Transaction';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalizeAmount(expense: any) {
   const obj = expense.toObject();
   return {

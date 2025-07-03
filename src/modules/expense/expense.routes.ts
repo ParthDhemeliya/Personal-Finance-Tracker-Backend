@@ -1,5 +1,3 @@
-// src/modules/expense/expense.routes.ts
-
 import express from 'express';
 import {
   createExpense,

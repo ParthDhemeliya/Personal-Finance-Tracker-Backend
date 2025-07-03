@@ -90,7 +90,11 @@ export const ExpenseRepository = {
   },
 
   update: async (id: string, data: Partial<ExpenseInput>) => {
-    const updateData: any = { ...data };
+    const updateData: Partial<ExpenseInput> & {
+      type?: string;
+      expenseCategory?: string;
+      customExpenseCategory?: string;
+    } = { ...data };
 
     if (data.categoryId) {
       updateData.expenseCategory = data.categoryId;
@@ -153,7 +157,11 @@ export const ExpenseRepository = {
     return { total: result[0]?.total || 0 };
   },
 
-  updateByUser: async (id: string, data: Partial<any>, userId: string) => {
+  updateByUser: async (
+    id: string,
+    data: Partial<ExpenseInput>,
+    userId: string,
+  ) => {
     return Transaction.findOneAndUpdate(
       { _id: id, user: userId, isDeleted: false },
       data,

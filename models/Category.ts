@@ -31,7 +31,7 @@ const categorySchema = new Schema<ICategory>(
       set: (val: string) => val.toLowerCase(),
       validate: {
         validator: (value: string) => COLOR_REGEX.test(value),
-        message: (props: any) =>
+        message: (props: { value: string }) =>
           `${props.value} is not a valid hex color code!`,
       },
     },

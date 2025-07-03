@@ -14,7 +14,7 @@ export const getExpenseStats = async (
   }
 
   const period = (req.query.period as string) || 'month';
-  let groupBy: any;
+  let groupBy: { year: { $year: string }; month?: { $month: string } };
   let dateFrom: Date;
 
   const now = new Date();
