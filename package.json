@@ -17,6 +17,16 @@
     "lint-staged": "lint-staged",
     "check:all": "npm run lint && npm test && npm run build && npm audit"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss}": [
+      "prettier --write"
+    ]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
