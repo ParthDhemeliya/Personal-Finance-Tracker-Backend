@@ -14,7 +14,7 @@ export const IncomeRepository = {
   },
 
   //  Add pagination method
-  findPaginatedByUser: async (userId: string, page = 1, limit = 5) => {
+  findPaginatedByUser: async (userId: string, page = 1, limit = 6) => {
     const skip = (page - 1) * limit;
 
     const query = {

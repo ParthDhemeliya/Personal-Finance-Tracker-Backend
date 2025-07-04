@@ -21,7 +21,7 @@ function normalizeAmount(income: any) {
 }
 
 export const IncomeService = {
-  createIncome: (data: IncomeInputRaw & { user: string }) => {
+  createIncome: async (data: IncomeInputRaw & { user: string }) => {
     const payload: IncomeInput = {
       amount: data.amount,
       date: data.date,
@@ -40,9 +40,10 @@ export const IncomeService = {
       payload.customIncomeSource = data.customIncomeSource.trim();
     }
 
-    return IncomeRepository.create(payload).then(normalizeAmount);
+    const income = await IncomeRepository.create(payload);
+    return normalizeAmount(income);
   },
-  getPaginatedIncomes: (userId: string, page = 1, limit = 5) => {
+  getPaginatedIncomes: (userId: string, page = 1, limit = 6) => {
     return IncomeRepository.findPaginatedByUser(userId, page, limit).then(
       ({ data, ...meta }) => ({
         ...meta,
