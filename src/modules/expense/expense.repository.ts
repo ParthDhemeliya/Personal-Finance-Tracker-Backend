@@ -3,7 +3,6 @@ import Transaction from '../../../models/Transaction';
 import { ExpenseInput, ExpenseCategorySummary } from './expense.interface';
 
 export const ExpenseRepository = {
-  // Aggregate expenses by category for a given month
   getCategorySummaryByMonth: async (
     userId: string,
     month: string,

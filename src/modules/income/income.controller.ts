@@ -92,7 +92,7 @@ export const updateIncome = async (
     next(err);
   }
 };
-
+// delete  income
 export const deleteIncome = async (
   req: Request,
   res: Response,
