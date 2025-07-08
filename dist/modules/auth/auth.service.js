@@ -1,0 +1,46 @@
+// src/modules/auth/auth.service.ts
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import { AuthRepository } from './auth.repository';
+import { AppError } from '../../utils/error/AppError';
+dotenv.config();
+export const AuthService = {
+    signup: async (data) => {
+        const existingUser = await AuthRepository.findByEmail(data.email);
+        if (existingUser)
+            throw new AppError('User already exists', 400);
+        const user = await AuthRepository.createUser(data);
+        return {
+            token: AuthService.generateToken(user._id.toString()),
+        };
+    },
+    login: async (data) => {
+        const user = await AuthRepository.findByEmail(data.email);
+        if (!user)
+            throw new AppError('Invalid credentials', 401);
+        const isMatch = await user.matchPassword(data.password);
+        if (!isMatch)
+            throw new AppError('Invalid credentials', 401);
+        return {
+            id: user._id,
+            email: user.email,
+            token: AuthService.generateToken(user._id.toString()),
+        };
+    },
+    getUser: async (id) => {
+        const user = await AuthRepository.findById(id);
+        if (!user)
+            throw new AppError('User not found', 404);
+        return user;
+    },
+    deleteUser: async (id) => {
+        const deleted = await AuthRepository.deleteUser(id);
+        if (!deleted)
+            throw new AppError('User not found or already deleted', 404);
+    },
+    generateToken: (id) => {
+        return jwt.sign({ id }, process.env.JWT_SECRET, {
+            expiresIn: '7d',
+        });
+    },
+};

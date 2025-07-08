@@ -8,14 +8,8 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "outDir": "dist",
-    "skipLibCheck": true,
-       },
-  "include": [
-    "*.ts",
-    "config/**/*.ts",
-    "routes/**/*.ts",
-    "src",
-    "types"
-  ],
+    "skipLibCheck": true
+  },
+  "include": ["*.ts", "config/**/*.ts", "routes/**/*.ts", "src", "types"],
   "exclude": ["dist", "node_modules"]
 }

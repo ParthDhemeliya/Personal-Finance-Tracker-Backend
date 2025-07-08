@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { getSavingsGoal, createSavingsGoal, updateSavingsGoal, getCurrentSavingsController, } from './savings.controller';
+import protect from '../auth/auth.middleware';
+const router = Router();
+router.use(protect);
+router.get('/', getSavingsGoal);
+router.post('/', createSavingsGoal);
+router.put('/', updateSavingsGoal);
+router.get('/current', getCurrentSavingsController);
+export default router;

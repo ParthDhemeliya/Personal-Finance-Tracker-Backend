@@ -1,0 +1,20 @@
+import express from 'express';
+import { createIncome, deleteIncome, getAllIncomes, getPaginatedIncomes, getTotalIncome, updateIncome, } from './income.controller';
+import { validateIncome } from './income.validator.middleware';
+import validateObjectId from '../../utils/validateObjectId';
+import protect from '../auth/auth.middleware';
+import authMiddleware from '../auth/auth.middleware';
+import { getIncomeStats } from './income.stats.controller';
+import { getIncomeSources } from './income.sources.controller';
+const router = express.Router();
+router.use(protect);
+router.get('/paginated', authMiddleware, getPaginatedIncomes);
+router.get('/total', getTotalIncome);
+router.get('/stats', getIncomeStats);
+router.get('/sources', getIncomeSources);
+// other routes
+router.post('/', validateIncome, createIncome);
+router.get('/', getAllIncomes);
+router.put('/:id', validateObjectId, validateIncome, updateIncome);
+router.delete('/:id', validateObjectId, deleteIncome);
+export default router;
