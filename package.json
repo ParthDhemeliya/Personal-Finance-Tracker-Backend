@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch ./server.ts",
-    "start": "ts-node src/server.ts",
+    "start": "node dist/server.js",
     "build": "tsc",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
