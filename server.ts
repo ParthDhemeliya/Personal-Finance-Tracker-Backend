@@ -14,7 +14,6 @@ import balanceRoutes from './src/modules/balance/balance.routes';
 import budgetRoutes from './src/modules/budget/budget.routes';
 import categoryRoutes from './src/modules/category/category.routes';
 import savingsRoutes from './src/modules/savings/savings.routes';
-import './src/utils/notificationScheduler';
 dotenv.config();
 const port = process.env.PORT || 5000;
 const app = express();
