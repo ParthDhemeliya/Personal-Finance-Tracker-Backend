@@ -8,6 +8,4 @@ router.post('/signup', validate(SignupSchema), signup);
 router.post('/login', validate(LoginSchema), login);
 router.get('/user', protect, getUser);
 router.delete('/user', protect, deleteUser);
-// router.put('/user', updateUserProfile);
-// router.post('/avatar', uploadAvatar);
 export default router;

@@ -20,17 +20,28 @@ const app = express();
 
 // Connect to MongoDB
 run();
+const corsOptions = {
+  origin: [
+    'http://localhost:5173',
+    'https://personal-finance-tracker-frontend-ck15.onrender.com',
+  ],
+  credentials: true,
+};
 
-app.use(
-  cors({
-    origin: [
-      'http://localhost:5173',
-      'https://personal-finance-tracker-frontend-ck15.onrender.com',
-    ],
-    credentials: true,
-  }),
-);
-app.options('*', cors());
+// ✅ Apply CORS with options (all routes, all methods including preflight)
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // explicitly handle preflight
+
+// app.use(
+//   cors({
+//     origin: [
+//       'http://localhost:5173',
+//       'https://personal-finance-tracker-frontend-ck15.onrender.com',
+//     ],
+//     credentials: true,
+//   }),
+// );
+// app.options('*', cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

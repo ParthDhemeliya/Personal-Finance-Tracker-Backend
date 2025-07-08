@@ -20,9 +20,13 @@ const app = express();
 // Connect to MongoDB
 run();
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: [
+        'http://localhost:5173',
+        'https://personal-finance-tracker-frontend-ck15.onrender.com',
+    ],
     credentials: true,
 }));
+app.options('*', cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Routes

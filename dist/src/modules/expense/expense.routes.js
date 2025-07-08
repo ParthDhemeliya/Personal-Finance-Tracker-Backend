@@ -10,7 +10,6 @@ router.get('/paginated', protect, getPaginatedExpenses);
 router.get('/total', getTotalExpense);
 router.get('/category-summary', getCategorySummary);
 router.get('/stats', getExpenseStats);
-router.get('/stats', getExpenseStats);
 router.post('/', validate(ExpenseSchema), createExpense);
 router.get('/', getAllExpenses);
 router.put('/:id', validate(ExpenseSchema), updateExpense);
