@@ -23,7 +23,7 @@ run();
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://personal-finance-tracker-frontend-ck15.onrender.com',
     credentials: true,
   }),
 );
