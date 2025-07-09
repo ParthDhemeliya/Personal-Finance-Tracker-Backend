@@ -16,7 +16,7 @@ import categoryRoutes from './src/modules/category/category.routes';
 import savingsRoutes from './src/modules/savings/savings.routes';
 import rootRoute from './src/routes/root.route';
 dotenv.config();
-const port = process.env.PORT || 5000;
+const port = Number(process.env.PORT) || 5000;
 const app = express();
 
 // Connect to MongoDB
@@ -24,7 +24,8 @@ run();
 const corsOptions = {
   origin: [
     'http://localhost:5173',
-    'https://personal-finance-tracker-frontend-ck15.onrender.com',
+    'http://localhost:3000',
+    'https://personal-finance-tracker-frontend-mu.vercel.app',
   ],
   credentials: true,
 };
@@ -51,7 +52,7 @@ app.use('/api/v1/savings-goal', savingsRoutes);
 app.use(globalErrorHandler);
 
 // Startup banner
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(
     chalk.cyanBright(`🚀 Server is running on http://localhost:${port}`),
   );
