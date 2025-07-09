@@ -24,7 +24,12 @@ run();
 const corsOptions = {
   origin: [
     'http://localhost:5173',
+<<<<<<< HEAD
     'https://personal-finance-tracker-frontend-8pxf3itg9.vercel.app',
+=======
+    'http://localhost:3000',
+    'https://personal-finance-tracker-frontend-mu.vercel.app',
+>>>>>>> 5f88ecaba3df7c5f3e65d3016461c40c31b091f2
   ],
   credentials: true,
 };
