@@ -14,6 +14,7 @@ import balanceRoutes from './src/modules/balance/balance.routes';
 import budgetRoutes from './src/modules/budget/budget.routes';
 import categoryRoutes from './src/modules/category/category.routes';
 import savingsRoutes from './src/modules/savings/savings.routes';
+import rootRoute from './src/routes/root.route';
 dotenv.config();
 const port = process.env.PORT || 5000;
 const app = express();
@@ -28,24 +29,17 @@ const corsOptions = {
   credentials: true,
 };
 
-// ✅ Apply CORS with options (all routes, all methods including preflight)
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // explicitly handle preflight
+app.options('*', cors(corsOptions));
 
-// app.use(
-//   cors({
-//     origin: [
-//       'http://localhost:5173',
-//       'https://personal-finance-tracker-frontend-ck15.onrender.com',
-//     ],
-//     credentials: true,
-//   }),
-// );
-// app.options('*', cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.use(express.static('public'));
+
+// Use your root route
+app.use('/', rootRoute);
 app.use('/api/auth', authRoutes);
 app.use('/api/v1/incomes', incomeRoutes);
 app.use('/api/v1/expenses', expenseRoutes);
