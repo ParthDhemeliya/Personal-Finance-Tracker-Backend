@@ -24,7 +24,7 @@ run();
 const corsOptions = {
   origin: [
     'http://localhost:5173',
-    'https://personal-finance-tracker-frontend-ck15.onrender.com',
+    'https://personal-finance-tracker-frontend-8pxf3itg9.vercel.app',
   ],
   credentials: true,
 };
