@@ -1,3 +1,4 @@
+/* eslint-env node */
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -20,22 +21,33 @@ dotenv.config();
 const port = Number(process.env.PORT) || 5000;
 const app = express();
 
+// ✅ Updated CORS setup with dynamic origin check
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://personal-finance-tracker-frontend-8pxf3itg9.vercel.app',
+];
+
 const corsOptions = {
-  origin: [
-    'http://localhost:5173',
-    'https://personal-finance-tracker-frontend-8pxf3itg9.vercel.app',
-  ],
+  origin: (
+    origin: string | undefined,
+    callback: (err: Error | null, allow?: boolean) => void,
+  ) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-// Routes
+// ✅ Routes
 app.use('/', rootRoute);
 app.use('/api/auth', authRoutes);
 app.use('/api/v1/incomes', incomeRoutes);
@@ -49,7 +61,7 @@ app.use('/api/v1/savings-goal', savingsRoutes);
 // Global error handler
 app.use(globalErrorHandler);
 
-//  Wait for MongoDB before starting server
+//  Wait for DB before starting server
 run()
   .then(() => {
     app.listen(port, '0.0.0.0', () => {
@@ -62,5 +74,5 @@ run()
   .catch((err) => {
     console.error(chalk.red(`❌ Failed to connect to MongoDB`));
     console.error(err);
-    process.exit(1); // Exit with failure
+    process.exit(1);
   });
