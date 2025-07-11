@@ -26,7 +26,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
   'https://personal-finance-tracker-frontend-8pxf3itg9.vercel.app',
-  'https://personal-finance-tracker-p1txti0g5-parths-projects-46e828f6.vercel.app',
+  'https://personal-finance-tracker-inky-three.vercel.app',
 ];
 
 const corsOptions = {
