@@ -64,7 +64,7 @@ Personal-Finance-Tracker-Backend/
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/Personal-Finance-Tracker-Backend.git
+   git clone https://github.com/ParthDhemeliya/Personal-Finance-Tracker-Backend.git.
    cd Personal-Finance-Tracker-Backend
    ```
 
