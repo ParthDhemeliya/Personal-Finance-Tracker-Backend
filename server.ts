@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import run from './config/db';
 import chalk from 'chalk';
+import cookieParser from 'cookie-parser';
 
 import incomeRoutes from './src/modules/income/income.routes';
 import './models/Category';
@@ -46,6 +47,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(express.static('public'));
 
 // ✅ Routes

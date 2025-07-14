@@ -15,6 +15,7 @@ export const AuthService = {
     const user = await AuthRepository.createUser(data);
     return {
       token: AuthService.generateToken(user._id.toString()),
+      // No need to return token to client
     };
   },
 
@@ -29,6 +30,7 @@ export const AuthService = {
       id: user._id,
       email: user.email,
       token: AuthService.generateToken(user._id.toString()),
+      // No need to return token to client
     };
   },
 

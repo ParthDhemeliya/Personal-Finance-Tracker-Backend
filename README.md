@@ -88,7 +88,7 @@ Personal-Finance-Tracker-Backend/
    yarn dev
    ```
 
-   The API will be available at `http://localhost:PORT/api`.
+   The API will be available at `https://personal-finance-tracker-backend-kin7.onrender.com`.
 
 ---
 

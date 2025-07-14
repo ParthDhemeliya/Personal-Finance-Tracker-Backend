@@ -9,7 +9,16 @@ export const signup = async (
 ) => {
   try {
     const result = await AuthService.signup(req.body);
-    res.status(201).json(result);
+    // Set JWT as HttpOnly cookie
+    res.cookie('token', result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+    // Do not send token in JSON response
+    res.status(201).json({ message: 'Signup successful' });
   } catch (err: unknown) {
     next(err);
   }
@@ -22,10 +31,38 @@ export const login = async (
 ) => {
   try {
     const result = await AuthService.login(req.body);
-    res.status(200).json(result);
+    // Set JWT as HttpOnly cookie
+    res.cookie('token', result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+    // Do not send token in JSON response
+    res.status(200).json({
+      id: result.id,
+      email: result.email,
+      message: 'Login successful',
+    });
   } catch (err: unknown) {
     next(err);
   }
+};
+
+// Add a logout endpoint to clear the cookie
+export const logout = async (
+  _req: Request,
+  res: Response,
+  _next: NextFunction,
+) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+  });
+  res.status(200).json({ message: 'Logged out successfully' });
 };
 
 export const getUser = async (
