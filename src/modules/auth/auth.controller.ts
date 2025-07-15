@@ -34,10 +34,10 @@ export const login = async (
     // Set JWT as HttpOnly cookie
     res.cookie('token', result.token, {
       httpOnly: true,
-      secure: false, // ✅ Don't require HTTPS locally
-      sameSite: 'lax', // ✅ Works with localhost
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     // Do not send token in JSON response
     res.status(200).json({
