@@ -7,8 +7,8 @@ import chalk from 'chalk';
 import cookieParser from 'cookie-parser';
 
 import incomeRoutes from './src/modules/income/income.routes';
-import './models/Category';
 import authRoutes from './src/modules/auth/auth.routes';
+import './models/Category';
 import { globalErrorHandler } from './src/middlewares/error.middleware';
 import expenseRoutes from './src/modules/expense/expense.routes';
 import transactionRoutes from './src/modules/transaction/transaction.routes';
@@ -35,6 +35,7 @@ const corsOptions = {
     origin: string | undefined,
     callback: (err: Error | null, allow?: boolean) => void,
   ) => {
+    console.log('Incoming request origin:', origin); // 👈 debug
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {

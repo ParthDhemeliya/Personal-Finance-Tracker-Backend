@@ -11,14 +11,23 @@ const protect = async (
   _res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const authHeader = req.headers.authorization;
+  let token: string | undefined;
 
-  if (!authHeader?.startsWith('Bearer ')) {
-    return next(new AppError('Not authorized, token missing', 401));
+  // 1. Try to get token from Authorization header
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith('Bearer ')) {
+    token = authHeader.split(' ')[1];
   }
 
-  const token = authHeader.split(' ')[1];
+  // 2. If not in header, try to get token from cookies
+  if (!token && req.cookies && req.cookies.token) {
+    token = req.cookies.token;
+  }
 
+  if (!token) {
+    return next(new AppError('Not authorized, token missing', 401));
+  }
+  console.log('Token', token);
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
       id: string;

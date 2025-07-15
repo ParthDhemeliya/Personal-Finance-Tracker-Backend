@@ -13,7 +13,7 @@ export const signup = async (
     res.cookie('token', result.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
@@ -34,8 +34,8 @@ export const login = async (
     // Set JWT as HttpOnly cookie
     res.cookie('token', result.token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: false, // ✅ Don't require HTTPS locally
+      sameSite: 'lax', // ✅ Works with localhost
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
@@ -78,6 +78,7 @@ export const getUser = async (
 
     const userId = (req.user as IUserDocument)._id.toString();
     const user = await AuthService.getUser(userId);
+    console.log('userr', user);
     res.status(200).json(user);
   } catch (err: unknown) {
     next(err);
