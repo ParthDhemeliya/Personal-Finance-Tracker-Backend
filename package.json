@@ -12,7 +12,7 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write .",
-    "prepare": "husky install",
+    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi",
     "husky:install": "husky install",
     "husky:provide": "npx husky add .husky/pre-commit 'yarn lint-staged'",
     "lint-staged": "lint-staged",
