@@ -10,17 +10,20 @@ export const signup = async (
   try {
     const result = await AuthService.signup(req.body);
     // Set JWT as HttpOnly cookie
-    const isProduction = process.env.NODE_ENV === 'production';
+    // const isProduction = process.env.NODE_ENV === 'production';
 
-    res.cookie('token', result.token, {
-      httpOnly: true,
-      secure: isProduction, // true on Render (prod), false on localhost
-      sameSite: isProduction ? 'none' : 'lax', // 'none' enables cross-origin cookies in prod
-      path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    // res.cookie('token', result.token, {
+    //   httpOnly: true,
+    //   secure: isProduction, // true on Render (prod), false on localhost
+    //   sameSite: isProduction ? 'none' : 'lax', // 'none' enables cross-origin cookies in prod
+    //   path: '/',
+    //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    // });
     // Do not send token in JSON response
-    res.status(201).json({ message: 'Signup successful' });
+    res.status(201).json({
+      token: result.token,
+      message: 'Signup successful',
+    });
   } catch (err: unknown) {
     next(err);
   }
@@ -34,19 +37,20 @@ export const login = async (
   try {
     const result = await AuthService.login(req.body);
     // Set JWT as HttpOnly cookie
-    const isProduction = process.env.NODE_ENV === 'production';
+    // const isProduction = process.env.NODE_ENV === 'production';
 
-    res.cookie('token', result.token, {
-      httpOnly: true,
-      secure: isProduction, //  true on Render (prod), false on localhost
-      sameSite: isProduction ? 'none' : 'lax', // 'none' enables cross-origin cookies in prod
-      path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    // res.cookie('token', result.token, {
+    //   httpOnly: true,
+    //   secure: isProduction, //  true on Render (prod), false on localhost
+    //   sameSite: isProduction ? 'none' : 'lax', // 'none' enables cross-origin cookies in prod
+    //   path: '/',
+    //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    // });
     // Do not send token in JSON response
     res.status(200).json({
       id: result.id,
       email: result.email,
+      token: result.token,
       message: 'Login successful',
     });
   } catch (err: unknown) {

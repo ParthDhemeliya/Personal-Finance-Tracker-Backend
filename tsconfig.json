@@ -10,6 +10,6 @@
     "outDir": "dist",
     "skipLibCheck": true
   },
-  "include": ["*.ts", "config/**/*.ts", "routes/**/*.ts", "src", "types"],
+  "include": ["src", "types", "tests"],
   "exclude": ["dist", "node_modules"]
 }

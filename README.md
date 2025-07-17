@@ -1,5 +1,47 @@
 # Personal Finance Tracker Backend
 
+## 🧪 Test Suite & Best Practices
+
+This project includes a comprehensive, modular unit test suite for all major backend modules. The tests are designed and implemented following industry best practices to ensure code quality, reliability, and maintainability.
+
+### **Test Coverage**
+
+- **Modules Covered:**
+  - Authentication (auth)
+  - Balance
+  - Budget (including management and overview)
+  - Category
+  - Expense
+  - Income
+  - Savings
+  - Transaction
+- **Test Types:**
+  - Controller, service, repository, middleware, and validator tests
+  - Both positive (success) and negative (error, unauthorized, not found, validation error) paths
+
+### **Best Practices Followed**
+
+- **Mocking:** All external dependencies (DB, services, models, JWT, etc.) are mocked using Jest (`jest.spyOn`, `jest-mock-extended`, etc.)
+- **Isolation:** No real database or network calls are made; all tests are fast and isolated
+- **Arrange-Act-Assert:** Each test follows the Arrange-Act-Assert structure for clarity
+- **Setup/Cleanup:** `beforeEach` is used to reset mocks and test state
+- **Type Safety:** TypeScript types/interfaces are used throughout
+- **Error Handling:** Negative paths check for thrown errors or that `next` is called with an error
+- **Validation:** Validation logic is tested by mocking schema methods
+- **Descriptive Names:** Tests use clear, descriptive names and are grouped logically
+- **Linting/Formatting:** Code is clean, readable, and consistently formatted
+
+### **How to Run Tests**
+
+```
+npx jest --coverage
+```
+
+- The test suite is expected to have a pass rate and code coverage above 80% for all major modules.
+- Coverage reports are generated after each run.
+
+---
+
 A robust backend API for managing personal finances, including budgets, expenses, income, savings, and more. Built with Node.js and TypeScript.
 
 ---
