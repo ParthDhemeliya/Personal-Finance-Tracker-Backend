@@ -34,11 +34,9 @@ describe('expense.repository', () => {
   });
 
   it('should find all by user', async () => {
-    jest
-      .spyOn(Transaction, 'find')
-      .mockReturnValue({
-        sort: jest.fn().mockReturnValue([{ _id: 'e1' }]),
-      } as any);
+    jest.spyOn(Transaction, 'find').mockReturnValue({
+      sort: jest.fn().mockReturnValue([{ _id: 'e1' }]),
+    } as any);
     const result = await ExpenseRepository.findAllByUser('user123');
     expect(Transaction.find).toHaveBeenCalled();
     expect(result[0]._id).toBe('e1');
@@ -48,7 +46,7 @@ describe('expense.repository', () => {
     jest.spyOn(Transaction, 'findOne').mockResolvedValue({ _id: 'e1' } as any);
     const result = await ExpenseRepository.findById('e1');
     expect(Transaction.findOne).toHaveBeenCalled();
-    expect(result._id).toBe('e1');
+    expect(result?._id).toBe('e1');
   });
 
   it('should update expense', async () => {
@@ -57,7 +55,7 @@ describe('expense.repository', () => {
       .mockResolvedValue({ _id: 'e1', amount: 200 } as any);
     const result = await ExpenseRepository.update('e1', { amount: 200 });
     expect(Transaction.findByIdAndUpdate).toHaveBeenCalled();
-    expect(result.amount).toBe(200);
+    expect(result?.amount).toBe(200);
   });
 
   it('should soft delete expense', async () => {
@@ -66,17 +64,15 @@ describe('expense.repository', () => {
       .mockResolvedValue({ _id: 'e1', isDeleted: true } as any);
     const result = await ExpenseRepository.softDelete('e1');
     expect(Transaction.findByIdAndUpdate).toHaveBeenCalled();
-    expect(result.isDeleted).toBe(true);
+    expect(result?.isDeleted).toBe(true);
   });
 
   it('should find paginated by user', async () => {
-    jest
-      .spyOn(Transaction, 'find')
-      .mockReturnValue({
-        sort: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockResolvedValue([{ _id: 'e1' }]),
-      } as any);
+    jest.spyOn(Transaction, 'find').mockReturnValue({
+      sort: jest.fn().mockReturnThis(),
+      skip: jest.fn().mockReturnThis(),
+      limit: jest.fn().mockResolvedValue([{ _id: 'e1' }]),
+    } as any);
     const result = await ExpenseRepository.findPaginatedByUser('user123', 0, 1);
     expect(Transaction.find).toHaveBeenCalled();
     expect(result[0]._id).toBe('e1');
@@ -107,7 +103,7 @@ describe('expense.repository', () => {
       'user123',
     );
     expect(Transaction.findOneAndUpdate).toHaveBeenCalled();
-    expect(result.amount).toBe(300);
+    expect(result?.amount).toBe(300);
   });
 
   it('should soft delete by user', async () => {
@@ -116,6 +112,6 @@ describe('expense.repository', () => {
       .mockResolvedValue({ _id: 'e1', isDeleted: true } as any);
     const result = await ExpenseRepository.softDeleteByUser('e1', 'user123');
     expect(Transaction.findOneAndUpdate).toHaveBeenCalled();
-    expect(result.isDeleted).toBe(true);
+    expect(result?.isDeleted).toBe(true);
   });
 });

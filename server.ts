@@ -22,7 +22,7 @@ dotenv.config();
 const port = Number(process.env.PORT) || 5000;
 const app = express();
 
-// ✅ Updated CORS setup with dynamic origin check
+//  Updated CORS setup with dynamic origin check
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
@@ -51,7 +51,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
 
-// ✅ Routes
+//  Routes
 app.use('/', rootRoute);
 app.use('/api/auth', authRoutes);
 app.use('/api/v1/incomes', incomeRoutes);

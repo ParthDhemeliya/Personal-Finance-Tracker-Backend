@@ -2,7 +2,20 @@ import { AuthService } from './auth.service';
 export const signup = async (req, res, next) => {
     try {
         const result = await AuthService.signup(req.body);
-        res.status(201).json(result);
+        // Set JWT as HttpOnly cookie
+        // const isProduction = process.env.NODE_ENV === 'production';
+        // res.cookie('token', result.token, {
+        //   httpOnly: true,
+        //   secure: isProduction, // true on Render (prod), false on localhost
+        //   sameSite: isProduction ? 'none' : 'lax', // 'none' enables cross-origin cookies in prod
+        //   path: '/',
+        //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        // });
+        // Do not send token in JSON response
+        res.status(201).json({
+            token: result.token,
+            message: 'Signup successful',
+        });
     }
     catch (err) {
         next(err);
@@ -11,11 +24,37 @@ export const signup = async (req, res, next) => {
 export const login = async (req, res, next) => {
     try {
         const result = await AuthService.login(req.body);
-        res.status(200).json(result);
+        // Set JWT as HttpOnly cookie
+        // const isProduction = process.env.NODE_ENV === 'production';
+        // res.cookie('token', result.token, {
+        //   httpOnly: true,
+        //   secure: isProduction, //  true on Render (prod), false on localhost
+        //   sameSite: isProduction ? 'none' : 'lax', // 'none' enables cross-origin cookies in prod
+        //   path: '/',
+        //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        // });
+        // Do not send token in JSON response
+        res.status(200).json({
+            id: result.id,
+            email: result.email,
+            token: result.token,
+            message: 'Login successful',
+        });
     }
     catch (err) {
         next(err);
     }
+};
+// Add a logout endpoint to clear the cookie
+export const logout = async (_req, res, _next) => {
+    const isProduction = process.env.NODE_ENV === 'production';
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
+        path: '/',
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
 };
 export const getUser = async (req, res, next) => {
     try {
@@ -25,6 +64,7 @@ export const getUser = async (req, res, next) => {
         }
         const userId = req.user._id.toString();
         const user = await AuthService.getUser(userId);
+        console.log('userr', user);
         res.status(200).json(user);
     }
     catch (err) {
