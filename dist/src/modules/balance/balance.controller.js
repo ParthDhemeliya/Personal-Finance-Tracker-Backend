@@ -1,4 +1,4 @@
-import { getBalanceSummary } from './balance.service';
+import { getBalanceSummary } from './balance.service.js';
 export const getBalance = async (req, res, next) => {
     const userId = req.user?._id?.toString();
     if (!userId) {

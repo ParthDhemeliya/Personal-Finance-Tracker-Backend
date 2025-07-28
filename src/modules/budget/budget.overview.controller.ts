@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import Budget from '../../../models/Budget';
-import Transaction from '../../../models/Transaction';
-import Category from '../../../models/Category';
+import Budget from '../../../models/Budget.js';
+import Transaction from '../../../models/Transaction.js';
+import Category from '../../../models/Category.js';
 import mongoose from 'mongoose';
 
 export const getBudgetOverview = async (

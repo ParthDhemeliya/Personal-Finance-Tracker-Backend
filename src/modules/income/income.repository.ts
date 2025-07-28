@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
-import Transaction from '../../../models/Transaction';
-import { IncomeInput } from './income.interface';
+import Transaction from '../../../models/Transaction.js';
+import { IncomeInput } from './income.interface.js';
 
 export const IncomeRepository = {
   create: async (data: IncomeInput) => {

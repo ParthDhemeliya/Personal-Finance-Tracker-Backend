@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { getCurrentSavings } from './savings.current.service';
+import { getCurrentSavings } from './savings.current.service.js';
 
 export const getCurrentSavingsController = async (
   req: Request,

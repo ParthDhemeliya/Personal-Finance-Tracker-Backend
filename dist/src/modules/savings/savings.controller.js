@@ -1,7 +1,7 @@
-import SavingsGoal from '../../../models/SavingsGoal';
-import { getCurrentSavings } from './savings.current.service';
-import { getSavingsGoal as getGoalService, createSavingsGoal as createGoalService, } from './savings.service';
-import { savingsGoalSchema } from './savings.validator';
+import SavingsGoal from '../../../models/SavingsGoal.js';
+import { getCurrentSavings } from './savings.current.service.js';
+import { getSavingsGoal as getGoalService, createSavingsGoal as createGoalService, } from './savings.service.js';
+import { savingsGoalSchema } from './savings.validator.js';
 export const updateSavingsGoal = async (req, res, next) => {
     const userId = req.user?._id?.toString();
     if (!userId) {

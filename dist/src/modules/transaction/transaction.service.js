@@ -1,4 +1,4 @@
-import * as TransactionRepo from './transaction.repository';
+import * as TransactionRepo from './transaction.repository.js';
 export const getRecentTransactions = async (userId, limit) => {
     return TransactionRepo.findRecentTransactions(userId, limit);
 };

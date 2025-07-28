@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getRecentTransactions } from './transaction.controller';
-import protect from '../auth/auth.middleware';
+import { getRecentTransactions } from './transaction.controller.js';
+import protect from '../auth/auth.middleware.js';
 
 const router = Router();
 

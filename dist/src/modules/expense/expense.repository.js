@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import Transaction from '../../../models/Transaction';
+import Transaction from '../../../models/Transaction.js';
 export const ExpenseRepository = {
     getCategorySummaryByMonth: async (userId, month) => {
         if (!/^\d{4}-\d{2}$/.test(month)) {

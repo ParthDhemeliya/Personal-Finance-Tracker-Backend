@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import Transaction from '../../../models/Transaction';
+import Transaction from '../../../models/Transaction.js';
 export const IncomeRepository = {
     create: async (data) => {
         return Transaction.create(data);

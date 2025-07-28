@@ -1,4 +1,4 @@
-import { ExpenseRepository } from './expense.repository';
+import { ExpenseRepository } from './expense.repository.js';
 // GET /api/v1/expenses/category-summary?month=YYYY-MM
 export const getCategorySummary = async (req, res, next) => {
     try {
@@ -22,7 +22,7 @@ export const getCategorySummary = async (req, res, next) => {
     }
 };
 // (Removed duplicate import)
-import { ExpenseService } from './expense.service';
+import { ExpenseService } from './expense.service.js';
 export const createExpense = async (req, res, next) => {
     const userId = req.user?._id?.toString();
     if (!userId) {

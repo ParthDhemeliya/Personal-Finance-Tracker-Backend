@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { IncomeService } from './income.service';
-import Transaction from '../../../models/Transaction';
+import { IncomeService } from './income.service.js';
+import Transaction from '../../../models/Transaction.js';
 import mongoose from 'mongoose';
 
 export const getAllIncomes = async (

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { IncomeSchema } from './income.validator';
+import { IncomeSchema } from './income.validator.js';
 
 export const validateIncome = (
   req: Request,

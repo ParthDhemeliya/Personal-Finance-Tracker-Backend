@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import SavingsGoal from '../../../models/SavingsGoal';
-import { getCurrentSavings } from './savings.current.service';
+import SavingsGoal from '../../../models/SavingsGoal.js';
+import { getCurrentSavings } from './savings.current.service.js';
 import {
   getSavingsGoal as getGoalService,
   createSavingsGoal as createGoalService,
-} from './savings.service';
-import { savingsGoalSchema } from './savings.validator';
+} from './savings.service.js';
+import { savingsGoalSchema } from './savings.validator.js';
 
 export const updateSavingsGoal = async (
   req: Request,

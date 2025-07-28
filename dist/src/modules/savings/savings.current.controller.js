@@ -1,4 +1,4 @@
-import { getCurrentSavings } from './savings.current.service';
+import { getCurrentSavings } from './savings.current.service.js';
 export const getCurrentSavingsController = async (req, res, next) => {
     const userId = req.user?._id?.toString();
     if (!userId) {

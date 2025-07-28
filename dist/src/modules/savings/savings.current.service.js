@@ -1,4 +1,4 @@
-import Transaction from '../../../models/Transaction';
+import Transaction from '../../../models/Transaction.js';
 import mongoose from 'mongoose';
 export const getCurrentSavings = async (userId) => {
     // Sum of all income - sum of all expense for this user

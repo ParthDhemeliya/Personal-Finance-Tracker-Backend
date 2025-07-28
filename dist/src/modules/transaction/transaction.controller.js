@@ -1,4 +1,4 @@
-import * as TransactionService from './transaction.service';
+import * as TransactionService from './transaction.service.js';
 export const getRecentTransactions = async (req, res, next) => {
     const userId = req.user?._id?.toString();
     if (!userId) {

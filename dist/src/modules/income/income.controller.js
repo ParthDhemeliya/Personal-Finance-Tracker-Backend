@@ -1,5 +1,5 @@
-import { IncomeService } from './income.service';
-import Transaction from '../../../models/Transaction';
+import { IncomeService } from './income.service.js';
+import Transaction from '../../../models/Transaction.js';
 import mongoose from 'mongoose';
 export const getAllIncomes = async (req, res, next) => {
     const userId = req.user?._id?.toString();

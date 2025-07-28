@@ -1,4 +1,4 @@
-import SavingsGoal from '../../../models/SavingsGoal';
+import SavingsGoal from '../../../models/SavingsGoal.js';
 export const findSavingsGoalByUser = async (userId) => {
     return SavingsGoal.findOne({ user: userId });
 };

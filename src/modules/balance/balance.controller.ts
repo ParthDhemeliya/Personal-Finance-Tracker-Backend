@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { getBalanceSummary } from './balance.service';
+import { getBalanceSummary } from './balance.service.js';
 
 export const getBalance = async (
   req: Request,

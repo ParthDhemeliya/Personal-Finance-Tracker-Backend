@@ -1,5 +1,5 @@
-import * as BudgetRepo from './budget.repository';
-import { IBudget } from './budget.interface';
+import * as BudgetRepo from './budget.repository.js';
+import { IBudget } from './budget.interface.js';
 
 export const getBudgets = async (userId: string) => {
   return BudgetRepo.findBudgetsByUser(userId);

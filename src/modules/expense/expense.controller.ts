@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { ExpenseCategorySummary } from './expense.interface';
-import { ExpenseRepository } from './expense.repository';
+import { ExpenseCategorySummary } from './expense.interface.js';
+import { ExpenseRepository } from './expense.repository.js';
 // GET /api/v1/expenses/category-summary?month=YYYY-MM
 export const getCategorySummary = async (
   req: Request,
@@ -29,8 +29,8 @@ export const getCategorySummary = async (
   }
 };
 // (Removed duplicate import)
-import { ExpenseService } from './expense.service';
-import { ExpenseInput } from './expense.interface';
+import { ExpenseService } from './expense.service.js';
+import { ExpenseInput } from './expense.interface.js';
 
 export const createExpense = async (
   req: Request,

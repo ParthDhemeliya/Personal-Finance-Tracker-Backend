@@ -4,7 +4,7 @@ export interface ExpenseCategorySummary {
 }
 import { Types } from 'mongoose';
 import { z } from 'zod';
-import { ExpenseSchema } from './expense.validator';
+import { ExpenseSchema } from './expense.validator.js';
 
 // export type ExpenseInput = z.infer<typeof ExpenseSchema> & {
 //   expenseCategory: Types.ObjectId;

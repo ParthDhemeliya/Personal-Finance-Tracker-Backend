@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import * as TransactionService from './transaction.service';
+import * as TransactionService from './transaction.service.js';
 
 export const getRecentTransactions = async (
   req: Request,

@@ -1,4 +1,4 @@
-import { IncomeSchema } from './income.validator';
+import { IncomeSchema } from './income.validator.js';
 export const validateIncome = (req, res, next) => {
     const result = IncomeSchema.safeParse(req.body);
     if (!result.success) {

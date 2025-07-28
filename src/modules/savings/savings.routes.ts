@@ -4,8 +4,8 @@ import {
   createSavingsGoal,
   updateSavingsGoal,
   getCurrentSavingsController,
-} from './savings.controller';
-import protect from '../auth/auth.middleware';
+} from './savings.controller.js';
+import protect from '../auth/auth.middleware.js';
 
 const router = Router();
 

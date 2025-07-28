@@ -1,9 +1,9 @@
 import express from 'express';
-import { createExpense, getAllExpenses, updateExpense, deleteExpense, getPaginatedExpenses, getTotalExpense, getCategorySummary, } from './expense.controller';
-import { getExpenseStats } from './expense.stats.controller';
-import protect from '../auth/auth.middleware';
-import { validate } from '../../utils/validate';
-import { ExpenseSchema } from './expense.validator';
+import { createExpense, getAllExpenses, updateExpense, deleteExpense, getPaginatedExpenses, getTotalExpense, getCategorySummary, } from './expense.controller.js';
+import { getExpenseStats } from './expense.stats.controller.js';
+import protect from '../auth/auth.middleware.js';
+import { validate } from '../../utils/validate.js';
+import { ExpenseSchema } from './expense.validator.js';
 const router = express.Router();
 router.use(protect);
 router.get('/paginated', protect, getPaginatedExpenses);

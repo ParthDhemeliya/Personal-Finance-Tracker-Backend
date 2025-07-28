@@ -6,13 +6,13 @@ import {
   getPaginatedIncomes,
   getTotalIncome,
   updateIncome,
-} from './income.controller';
-import { validateIncome } from './income.validator.middleware';
-import validateObjectId from '../../utils/validateObjectId';
-import protect from '../auth/auth.middleware';
-import authMiddleware from '../auth/auth.middleware';
-import { getIncomeStats } from './income.stats.controller';
-import { getIncomeSources } from './income.sources.controller';
+} from './income.controller.js';
+import { validateIncome } from './income.validator.middleware.js';
+import validateObjectId from '../../utils/validateObjectId.js';
+import protect from '../auth/auth.middleware.js';
+import authMiddleware from '../auth/auth.middleware.js';
+import { getIncomeStats } from './income.stats.controller.js';
+import { getIncomeSources } from './income.sources.controller.js';
 
 const router = express.Router();
 

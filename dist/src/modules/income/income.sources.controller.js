@@ -1,4 +1,4 @@
-import Transaction from '../../../models/Transaction';
+import Transaction from '../../../models/Transaction.js';
 export const getIncomeSources = async (req, res, next) => {
     const userId = req.user?._id?.toString();
     if (!userId) {

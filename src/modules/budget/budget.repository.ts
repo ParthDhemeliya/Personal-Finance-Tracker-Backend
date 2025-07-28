@@ -1,6 +1,6 @@
 // Adjust the import path if necessary, or create the Budget model if it doesn't exist
-import Budget from '../../../models/Budget';
-import { IBudget } from './budget.interface';
+import Budget from '../../../models/Budget.js';
+import { IBudget } from './budget.interface.js';
 
 export const findBudgetsByUser = async (userId: string) => {
   return Budget.find({ user: userId });

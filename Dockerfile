@@ -1,23 +1,20 @@
-# Use official Node.js LTS image
-FROM node:18-alpine
-
-# Set working directory
+# Stage 1 - build
+FROM node:18-alpine AS builder
 WORKDIR /app
-
-# Copy package.json and package-lock.json
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
+COPY package.json pnpm-lock.yaml ./
+RUN npm install -g pnpm && pnpm install
 COPY . .
+RUN pnpm build   # compiles TypeScript into /dist
 
-# Build TypeScript
-RUN npm run build
+# Stage 2 - run
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.env ./.env
+COPY package.json ./
+EXPOSE 5050
 
-# Expose the port your app runs ona
-EXPOSE 5000
-
-# Start the app
+# ✅ FIXED: Use shell form instead of JSON
 CMD ["node", "dist/server.js"]
+# CMD node dist/server.js

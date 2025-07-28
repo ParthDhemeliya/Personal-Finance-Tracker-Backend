@@ -1,5 +1,5 @@
-import * as SavingsRepo from './savings.repository';
-import { ISavingsGoal } from './savings.interface';
+import * as SavingsRepo from './savings.repository.js';
+import { ISavingsGoal } from './savings.interface.js';
 
 export const getSavingsGoal = async (userId: string) => {
   return SavingsRepo.findSavingsGoalByUser(userId);

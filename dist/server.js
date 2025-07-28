@@ -2,24 +2,26 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import run from './config/db';
+import run from './config/db.js';
 import chalk from 'chalk';
 import cookieParser from 'cookie-parser';
-import incomeRoutes from './src/modules/income/income.routes';
-import authRoutes from './src/modules/auth/auth.routes';
-import './models/Category';
-import { globalErrorHandler } from './src/middlewares/error.middleware';
-import expenseRoutes from './src/modules/expense/expense.routes';
-import transactionRoutes from './src/modules/transaction/transaction.routes';
-import balanceRoutes from './src/modules/balance/balance.routes';
-import budgetRoutes from './src/modules/budget/budget.routes';
-import categoryRoutes from './src/modules/category/category.routes';
-import savingsRoutes from './src/modules/savings/savings.routes';
-import rootRoute from './src/routes/root.route';
+import mongoose from 'mongoose';
+import incomeRoutes from './src/modules/income/income.routes.js';
+import rootRoute from './src/routes/root.route.js';
+import authRoutes from './src/modules/auth/auth.routes.js';
+import expenseRoutes from './src/modules/expense/expense.routes.js';
+import transactionRoutes from './src/modules/transaction/transaction.routes.js';
+import balanceRoutes from './src/modules/balance/balance.routes.js';
+import budgetRoutes from './src/modules/budget/budget.routes.js';
+import categoryRoutes from './src/modules/category/category.routes.js';
+import savingsRoutes from './src/modules/savings/savings.routes.js';
+import { globalErrorHandler } from './src/middlewares/error.middleware.js';
+import { httpRequestCounter, httpRequestDurationMicroseconds, register, } from './src/utils/metrics.js';
 dotenv.config();
+console.log('Port', Number(process.env.PORT));
 const port = Number(process.env.PORT) || 5000;
 const app = express();
-//  Updated CORS setup with dynamic origin check
+// CORS setup
 const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:3000',
@@ -27,15 +29,17 @@ const allowedOrigins = [
     'https://personal-finance-tracker-inky-three.vercel.app',
 ];
 const corsOptions = {
-    origin: (origin, callback) => {
-        console.log('Incoming request origin:', origin); // 👈 debug
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        }
-        else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: process.env.NODE_ENV === 'development'
+        ? true
+        : (origin, callback) => {
+            console.log('Incoming request origin:', origin);
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            }
+            else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
     credentials: true,
 };
 app.use(cors(corsOptions));
@@ -43,7 +47,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
-//  Routes
+//  Metrics Middleware (records every request)
+app.use((req, res, next) => {
+    const startEpoch = Date.now();
+    res.on('finish', () => {
+        const responseTimeInSeconds = (Date.now() - startEpoch) / 1000;
+        const route = req.route?.path || req.path;
+        httpRequestDurationMicroseconds.observe({ method: req.method, route, status_code: res.statusCode }, responseTimeInSeconds);
+        httpRequestCounter.inc({
+            method: req.method,
+            route,
+            status_code: res.statusCode,
+        });
+    });
+    next();
+});
+// Routes
 app.use('/', rootRoute);
 app.use('/api/auth', authRoutes);
 app.use('/api/v1/incomes', incomeRoutes);
@@ -53,18 +72,30 @@ app.use('/api/v1/balance', balanceRoutes);
 app.use('/api/v1/budgets', budgetRoutes);
 app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/savings-goal', savingsRoutes);
-// Global error handler
+//  Metrics Endpoint (for Prometheus)
+app.get('/metrics', async (_req, res) => {
+    res.set('Content-Type', register.contentType);
+    res.end(await register.metrics());
+});
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        timestamp: new Date(),
+        environment: process.env.NODE_ENV,
+        mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    });
+});
+// Error handler
 app.use(globalErrorHandler);
-//  Wait for DB before starting server
+// Start server after DB connection
 run()
     .then(() => {
-    app.listen(port, '0.0.0.0', () => {
+    app.listen(port, () => {
         console.log(chalk.cyanBright(`🚀 Server is running on http://localhost:${port}`));
         console.log(chalk.magenta(`📦 API Base: /api`));
     });
 })
-    .catch((err) => {
-    console.error(chalk.red(`❌ Failed to connect to MongoDB`));
-    console.error(err);
+    .catch((_err) => {
+    console.log('db connection error', _err);
     process.exit(1);
 });

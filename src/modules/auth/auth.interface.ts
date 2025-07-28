@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SignupSchema, LoginSchema } from './auth.validator';
+import { SignupSchema, LoginSchema } from './auth.validator.js';
 
 export interface AuthPayload {
   id: string;

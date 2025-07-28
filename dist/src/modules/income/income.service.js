@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
-import { IncomeRepository } from './income.repository';
-import Transaction from '../../../models/Transaction';
+import { IncomeRepository } from './income.repository.js';
+import Transaction from '../../../models/Transaction.js';
 // ✅ Normalize amount + populate incomeSource field correctly
 function normalizeAmount(income) {
     const obj = income.toObject();

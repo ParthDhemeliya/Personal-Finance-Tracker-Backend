@@ -1,8 +1,8 @@
 // src/modules/auth/auth.service.ts
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { AuthRepository } from './auth.repository';
-import { AppError } from '../../utils/error/AppError';
+import { AuthRepository } from './auth.repository.js';
+import { AppError } from '../../utils/error/AppError.js';
 dotenv.config();
 export const AuthService = {
     signup: async (data) => {

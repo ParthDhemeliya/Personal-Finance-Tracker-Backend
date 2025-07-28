@@ -1,5 +1,5 @@
-import User from '../../../models/User';
-import { SignupRequestBody } from './auth.interface';
+import User from '../../../models/User.js';
+import { SignupRequestBody } from './auth.interface.js';
 
 export const AuthRepository = {
   findByEmail: async (email: string) => User.findOne({ email }),

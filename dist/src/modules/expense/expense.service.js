@@ -1,7 +1,7 @@
-import { ExpenseRepository } from './expense.repository';
-import { AppError } from '../../utils/error/AppError';
+import { ExpenseRepository } from './expense.repository.js';
+import { AppError } from '../../utils/error/AppError.js';
 import { Types } from 'mongoose';
-import Transaction from '../../../models/Transaction';
+import Transaction from '../../../models/Transaction.js';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalizeAmount(expense) {
     const obj = expense.toObject();

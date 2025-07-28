@@ -1,4 +1,4 @@
-import * as SavingsRepo from './savings.repository';
+import * as SavingsRepo from './savings.repository.js';
 export const getSavingsGoal = async (userId) => {
     return SavingsRepo.findSavingsGoalByUser(userId);
 };

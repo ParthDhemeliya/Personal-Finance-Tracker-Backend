@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { AuthService } from './auth.service';
-import { IUserDocument } from '../../../models/User';
+import { AuthService } from './auth.service.js';
+import { IUserDocument } from '../../../models/User.js';
 
 export const signup = async (
   req: Request,
@@ -9,17 +9,6 @@ export const signup = async (
 ) => {
   try {
     const result = await AuthService.signup(req.body);
-    // Set JWT as HttpOnly cookie
-    // const isProduction = process.env.NODE_ENV === 'production';
-
-    // res.cookie('token', result.token, {
-    //   httpOnly: true,
-    //   secure: isProduction, // true on Render (prod), false on localhost
-    //   sameSite: isProduction ? 'none' : 'lax', // 'none' enables cross-origin cookies in prod
-    //   path: '/',
-    //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    // });
-    // Do not send token in JSON response
     res.status(201).json({
       token: result.token,
       message: 'Signup successful',

@@ -1,4 +1,4 @@
-import * as BalanceRepo from './balance.repository';
+import * as BalanceRepo from './balance.repository.js';
 export const getBalanceSummary = async (userId) => {
     const [totalIncome, totalExpense] = await Promise.all([
         BalanceRepo.getTotalIncome(userId),

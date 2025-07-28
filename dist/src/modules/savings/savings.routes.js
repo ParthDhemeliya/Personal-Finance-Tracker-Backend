@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getSavingsGoal, createSavingsGoal, updateSavingsGoal, getCurrentSavingsController, } from './savings.controller';
-import protect from '../auth/auth.middleware';
+import { getSavingsGoal, createSavingsGoal, updateSavingsGoal, getCurrentSavingsController, } from './savings.controller.js';
+import protect from '../auth/auth.middleware.js';
 const router = Router();
 router.use(protect);
 router.get('/', getSavingsGoal);

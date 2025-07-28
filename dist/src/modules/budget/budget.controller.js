@@ -1,5 +1,5 @@
-import Budget from '../../../models/Budget';
-import { budgetSchema } from './budget.validator';
+import Budget from '../../../models/Budget.js';
+import { budgetSchema } from './budget.validator.js';
 export const getBudgets = async (req, res, next) => {
     const userId = req.user?._id?.toString();
     if (!userId) {

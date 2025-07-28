@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
-import Transaction from '../../../models/Transaction';
-import { ExpenseInput, ExpenseCategorySummary } from './expense.interface';
+import Transaction from '../../../models/Transaction.js';
+import { ExpenseInput, ExpenseCategorySummary } from './expense.interface.js';
 
 export const ExpenseRepository = {
   getCategorySummaryByMonth: async (
